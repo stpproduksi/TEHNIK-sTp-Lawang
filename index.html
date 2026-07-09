@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TEHNIK STP LAWANG</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0B1E23;
+    --panel:#10282E;
+    --panel-2:#153036;
+    --line:#1F3D43;
+    --accent:#35C4B0;
+    --accent-dim:#1F5C55;
+    --warn:#F0A93B;
+    --danger:#E8756A;
+    --text:#E8F1EF;
+    --text-muted:#7E9C9A;
+    --mono:'IBM Plex Mono', ui-monospace, monospace;
+    --sans:'Inter', system-ui, -apple-system, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
+  }
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;
+    padding:16px;
+  }
+  .panel{max-width:640px; margin:0 auto;}
+  .panel__header{
+    display:flex; justify-content:space-between; align-items:flex-end;
+    padding:4px 4px 16px; border-bottom:1px solid var(--line); margin-bottom:20px;
+  }
+  .panel__eyebrow{
+    display:block; font-family:var(--mono); font-size:11px; letter-spacing:.12em;
+    color:var(--accent); text-transform:uppercase; margin-bottom:6px;
+  }
+  .panel__title h1{margin:0; font-size:22px; font-weight:700; letter-spacing:-.01em;}
+  .panel__clock{
+    font-family:var(--mono); font-size:14px; color:var(--text-muted);
+    border:1px solid var(--line); border-radius:6px; padding:6px 10px;
+    font-variant-numeric:tabular-nums;
+  }
+
+  .console{
+    background:var(--panel); border:1px solid var(--line); border-radius:14px;
+    padding:20px; display:grid; grid-template-columns:1fr 1fr; gap:14px 12px;
+  }
+  .field{display:flex; flex-direction:column; gap:6px;}
+  .field--wide{grid-column:1 / -1;}
+  label{
+    font-family:var(--mono); font-size:11px; letter-spacing:.08em;
+    color:var(--text-muted); text-transform:uppercase;
+  }
+  input, select, textarea{
+    background:var(--panel-2); border:1px solid var(--line); color:var(--text);
+    border-radius:8px; padding:10px 12px; font-family:var(--sans); font-size:15px;
+    width:100%; outline:none; transition:border-color .15s, box-shadow .15s;
+  }
+  select{
+    font-family:var(--mono); appearance:none;
+    background-image:linear-gradient(45deg, transparent 50%, var(--text-muted) 50%),
+                      linear-gradient(135deg, var(--text-muted) 50%, transparent 50%);
+    background-position:calc(100% - 18px) center, calc(100% - 13px) center;
+    background-size:5px 5px, 5px 5px; background-repeat:no-repeat;
+  }
+  textarea{resize:vertical; min-height:84px; font-family:var(--sans); line-height:1.4;}
+  input:focus, select:focus, textarea:focus{
+    border-color:var(--accent); box-shadow:0 0 0 3px rgba(53,196,176,0.18);
+  }
+  .btn{
+    grid-column:1 / -1; margin-top:4px;
+    background:var(--accent); color:#06201C; border:none; border-radius:8px;
+    font-family:var(--mono); font-weight:600; font-size:13px; letter-spacing:.06em;
+    text-transform:uppercase; padding:12px; cursor:pointer;
+    transition:transform .08s, filter .15s;
+  }
+  .btn:hover{filter:brightness(1.08);}
+  .btn:active{transform:scale(0.98);}
+  .btn:disabled{opacity:.6; cursor:default;}
+  .btn--ghost{
+    grid-column:auto; background:transparent; color:var(--accent);
+    border:1px solid var(--accent-dim); padding:6px 10px; font-size:11px;
+  }
+  .status{grid-column:1/-1; margin:2px 0 0; font-size:13px; font-family:var(--mono); min-height:16px;}
+  .status--success{color:var(--accent);}
+  .status--error{color:var(--danger);}
+
+  .log{margin-top:22px;}
+  .log__head{
+    display:flex; justify-content:space-between; align-items:center;
+    font-family:var(--mono); font-size:11px; letter-spacing:.1em; color:var(--text-muted);
+    text-transform:uppercase; margin-bottom:10px;
+  }
+  .log__table{display:flex; flex-direction:column; gap:10px;}
+  .log__empty{color:var(--text-muted); font-size:13px; font-family:var(--mono);}
+  .log__entry{
+    background:var(--panel); border:1px solid var(--line); border-radius:10px;
+    padding:12px 14px;
+  }
+  .log__meta{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:6px;}
+  .tag{
+    font-family:var(--mono); font-size:11px; font-weight:600; letter-spacing:.04em;
+    padding:2px 7px; border-radius:5px;
+  }
+  .tag--accent{background:rgba(53,196,176,0.16); color:var(--accent);}
+  .tag--warn{background:rgba(240,169,59,0.16); color:var(--warn);}
+  .log__date{font-family:var(--mono); font-size:12px; color:var(--text-muted);}
+  .log__note{margin:4px 0 6px; font-size:14px; line-height:1.45; color:var(--text);}
+  .log__by{font-size:12px; color:var(--text-muted);}
+
+  @media (max-width:480px){
+    .console{grid-template-columns:1fr;}
+    .field--wide{grid-column:auto;}
+  }
+</style>
+</head>
+<body>
+  <div class="panel">
+    <header class="panel__header">
+      <div class="panel__title">
+        <span class="panel__eyebrow">STP LAWANG · LOG TEHNIK</span>
+        <h1>Thermo &amp; Down Time</h1>
+      </div>
+      <div id="clock" class="panel__clock">--:--:--</div>
+    </header>
+
+    <form id="entryForm" class="console">
+      <div class="field">
+        <label for="tanggal">Tanggal</label>
+        <input type="date" id="tanggal" required>
+      </div>
+      <div class="field">
+        <label for="thermo">Thermo</label>
+        <select id="thermo" required>
+          <option value="" disabled selected>Pilih sensor…</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="downtime">Down Time</label>
+        <input type="text" id="downtime" placeholder="cth: 45 menit">
+      </div>
+      <div class="field">
+        <label for="nama">Nama Tehnik</label>
+        <input type="text" id="nama" placeholder="Nama teknisi" required>
+      </div>
+      <div class="field field--wide">
+        <label for="keterangan">Keterangan</label>
+        <textarea id="keterangan" placeholder="Detail kejadian, tindakan yang dilakukan, hasil…"></textarea>
+      </div>
+      <button type="submit" id="submitBtn" class="btn">Simpan ke Sheet</button>
+      <p id="statusMsg" class="status" role="status" aria-live="polite"></p>
+    </form>
+
+    <section class="log">
+      <div class="log__head">
+        <span>Riwayat terbaru</span>
+        <button id="refreshBtn" class="btn btn--ghost" type="button">Muat ulang</button>
+      </div>
+      <div id="logTable" class="log__table">
+        <p class="log__empty">Memuat data…</p>
+      </div>
+    </section>
+  </div>
+
+<script>
+  var THERMO_OPTIONS = ["TF5","TF6","TF7","TF8","TF9","TF10","TF11","TF12","TF13","TF14","TF15","TF16"];
+
+  function pad(n){ return n < 10 ? '0' + n : '' + n; }
+
+  function initThermoOptions(){
+    var sel = document.getElementById('thermo');
+    THERMO_OPTIONS.forEach(function(code){
+      var opt = document.createElement('option');
+      opt.value = code;
+      opt.textContent = code;
+      sel.appendChild(opt);
+    });
+  }
+
+  function setDefaultDate(){
+    var input = document.getElementById('tanggal');
+    var now = new Date();
+    input.value = now.getFullYear() + '-' + pad(now.getMonth()+1) + '-' + pad(now.getDate());
+  }
+
+  function tickClock(){
+    var el = document.getElementById('clock');
+    var now = new Date();
+    el.textContent = pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds());
+  }
+
+  function showStatus(msg, type){
+    var el = document.getElementById('statusMsg');
+    el.textContent = msg;
+    el.className = 'status status--' + type;
+  }
+
+  function escapeHtml(str){
+    if (!str) return '';
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function renderEntries(entries){
+    var wrap = document.getElementById('logTable');
+    if (!entries || entries.length === 0){
+      wrap.innerHTML = '<p class="log__empty">Belum ada catatan.</p>';
+      return;
+    }
+    wrap.innerHTML = entries.map(function(e){
+      var downtimeTag = e.downTime ? '<span class="tag tag--warn">DOWN ' + escapeHtml(e.downTime) + '</span>' : '';
+      var note = e.keterangan ? '<p class="log__note">' + escapeHtml(e.keterangan) + '</p>' : '';
+      return '<div class="log__entry">' +
+          '<div class="log__meta">' +
+            '<span class="tag tag--accent">' + escapeHtml(e.thermo) + '</span>' +
+            '<span class="log__date">' + escapeHtml(e.tanggal) + '</span>' +
+            downtimeTag +
+          '</div>' +
+          note +
+          '<span class="log__by">— ' + escapeHtml(e.namaTehnik) + '</span>' +
+        '</div>';
+    }).join('');
+  }
+
+  function loadEntries(){
+    var wrap = document.getElementById('logTable');
+    wrap.innerHTML = '<p class="log__empty">Memuat data…</p>';
+    google.script.run.withSuccessHandler(renderEntries).withFailureHandler(function(err){
+      wrap.innerHTML = '<p class="log__empty">Gagal memuat: ' + escapeHtml(err.message) + '</p>';
+    }).getRecentEntries(15);
+  }
+
+  document.getElementById('entryForm').addEventListener('submit', function(ev){
+    ev.preventDefault();
+    var btn = document.getElementById('submitBtn');
+    var data = {
+      tanggal: document.getElementById('tanggal').value,
+      thermo: document.getElementById('thermo').value,
+      downTime: document.getElementById('downtime').value.trim(),
+      keterangan: document.getElementById('keterangan').value.trim(),
+      namaTehnik: document.getElementById('nama').value.trim()
+    };
+    if (!data.tanggal || !data.thermo || !data.namaTehnik){
+      showStatus('Tanggal, Thermo, dan Nama Tehnik wajib diisi.', 'error');
+      return;
+    }
+    btn.disabled = true;
+    btn.textContent = 'Menyimpan…';
+    google.script.run.withSuccessHandler(function(){
+      showStatus('Tersimpan ke sheet ✓', 'success');
+      document.getElementById('entryForm').reset();
+      setDefaultDate();
+      btn.disabled = false;
+      btn.textContent = 'Simpan ke Sheet';
+      loadEntries();
+    }).withFailureHandler(function(err){
+      showStatus('Gagal menyimpan: ' + err.message, 'error');
+      btn.disabled = false;
+      btn.textContent = 'Simpan ke Sheet';
+    }).addEntry(data);
+  });
+
+  document.getElementById('refreshBtn').addEventListener('click', loadEntries);
+
+  initThermoOptions();
+  setDefaultDate();
+  tickClock();
+  setInterval(tickClock, 1000);
+  loadEntries();
+</script>
+</body>
+</html>
