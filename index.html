@@ -127,7 +127,7 @@
     <header class="panel__header">
       <div class="panel__title">
         <span class="panel__eyebrow">STP LAWANG · LOG TEHNIK</span>
-        <h1>Thermo &amp; Down Time</h1>
+        <h1>Laporan &amp; Down Time</h1>
       </div>
       <div id="clock" class="panel__clock">--:--:--</div>
     </header>
@@ -138,9 +138,9 @@
         <input type="date" id="tanggal" required>
       </div>
       <div class="field">
-        <label for="thermo">Thermo</label>
+        <label for="thermo">Divisi</label>
         <select id="thermo" required>
-          <option value="" disabled selected>Pilih sensor…</option>
+          <option value="" disabled selected>Pilih Divisi…</option>
         </select>
       </div>
       <div class="field">
@@ -172,7 +172,7 @@
 
 <script>
   var APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxkpEQV3RXiMXRCBk34EFFeAYnCqDn9AVh48YzWFRlnZ0kjWOC2eAk4YYgDZyhPfD5R/exec'
-  var THERMO_OPTIONS = ["TF5","TF6","TF7","TF8","TF9","TF10","TF11","TF12","TF13","TF14","TF15","TF16"];
+  var THERMO_OPTIONS = ["GILING","EXTRUDER","THERMO"];
 
   function pad(n){ return n < 10 ? '0' + n : '' + n; }
 
