@@ -1,1 +1,1 @@
-# STP LAWANG
+# STP-Pandaan
